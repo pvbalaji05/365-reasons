@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>365 Reasons I Love You ❤️</title>
+
+<style>
+
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#ff758c,#ff7eb3);
+overflow:hidden;
+padding:20px;
+}
+
+/* floating hearts */
+
+.heart{
+position:absolute;
+font-size:20px;
+opacity:0.7;
+animation:float 6s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh);opacity:0;}
+50%{opacity:1;}
+100%{transform:translateY(-10vh);opacity:0;}
+}
+
+/* card */
+
+.container{
+background:white;
+padding:35px;
+border-radius:20px;
+text-align:center;
+max-width:420px;
+width:90%;
+box-shadow:0 15px 40px rgba(0,0,0,0.3);
+transition:all .4s;
+}
+
+.fade{
+opacity:0;
+transform:translateY(-20px);
+}
+
+/* birthday screen */
+
+.birthday{
+display:none;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:white;
+padding:30px;
+}
+
+.birthday h1{
+font-size:42px;
+animation:pop 1s infinite alternate;
+}
+
+.birthday p{
+font-size:20px;
+max-width:600px;
+line-height:1.6;
+}
+
+@keyframes pop{
+from{transform:scale(1);}
+to{transform:scale(1.08);}
+}
+
+/* reason text */
+
+#reason{
+font-size:20px;
+margin:25px 0;
+min-height:70px;
+color:#333;
+font-weight:500;
+line-height:1.6;
+word-wrap:break-word;
+}
+
+/* button */
+
+button{
+padding:12px 28px;
+border:none;
+border-radius:10px;
+background:#ff4d6d;
+color:white;
+font-size:16px;
+cursor:pointer;
+transition:all .3s;
+}
+
+button:hover{
+transform:scale(1.1);
+background:#ff1e4d;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+pointer-events:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container" id="card">
+
+<h1 style="color:#ff4d6d;">💖 365 Reasons I Love You 💖</h1>
+
+<p id="count">Reason 1 / 365</p>
+
+<p id="reason"></p>
+
+<button onclick="nextReason()">Next Reason 💌</button>
+
+</div>
+
+<div class="birthday" id="birthday">
+
+<h1>🎉 Happy 19th Birthday My Love 🎂</h1>
+
+<p>
+After 365 reasons… the biggest reason is simple —  
+I love you more than words can ever explain ❤️  
+You make my life brighter, happier, and more meaningful every day.
+</p>
+
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+
+/* create 365 reasons */
+
+let reasons=[];
+
+for(let i=1;i<=365;i++){
+reasons.push("Reason "+i+": Because you make my life happier every single day ❤️");
+}
+
+let index=0;
+let typing;
+let reasonText=document.getElementById("reason");
+
+/* slower typing animation */
+
+function typeText(text){
+
+clearInterval(typing);
+reasonText.innerHTML="";
+let i=0;
+
+typing=setInterval(()=>{
+
+reasonText.innerHTML+=text.charAt(i);
+i++;
+
+if(i>=text.length){
+clearInterval(typing);
+}
+
+},60);   // slowed from 25 → 60
+
+}
+
+/* next reason */
+
+function nextReason(){
+
+let card=document.getElementById("card");
+
+card.classList.add("fade");
+
+setTimeout(()=>{
+
+index++;
+
+if(index>=365){
+
+card.style.display="none";
+document.getElementById("birthday").style.display="flex";
+startFireworks();
+return;
+
+}
+
+document.getElementById("count").innerText="Reason "+(index+1)+" / 365";
+
+typeText(reasons[index]);
+
+card.classList.remove("fade");
+
+},300);
+
+}
+
+typeText(reasons[0]);
+
+/* floating hearts */
+
+function createHeart(){
+
+let heart=document.createElement("div");
+
+heart.className="heart";
+heart.innerHTML="💖";
+
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(18+Math.random()*20)+"px";
+heart.style.animationDuration=(4+Math.random()*3)+"s";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},6000);
+
+}
+
+setInterval(createHeart,600);
+
+/* fireworks */
+
+let canvas=document.getElementById("fireworks");
+let ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function startFireworks(){
+
+setInterval(()=>{
+
+for(let i=0;i<50;i++){
+
+particles.push({
+x:canvas.width/2,
+y:canvas.height/2,
+dx:(Math.random()-0.5)*10,
+dy:(Math.random()-0.5)*10,
+life:100
+});
+
+}
+
+},700);
+
+animateFireworks();
+
+}
+
+function animateFireworks(){
+
+requestAnimationFrame(animateFireworks);
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+particles.forEach((p,i)=>{
+
+p.x+=p.dx;
+p.y+=p.dy;
+p.life--;
+
+ctx.fillStyle="hsl("+Math.random()*360+",100%,60%)";
+ctx.fillRect(p.x,p.y,3,3);
+
+if(p.life<=0) particles.splice(i,1);
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
+```
